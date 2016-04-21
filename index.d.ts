@@ -1,14 +1,19 @@
 import {Readable} from 'stream';
+
+declare var FacebookChatApi: FacebookChatApi.FacebookChatApiStatic;
+
 declare namespace FacebookChatApi {
 
   export interface FacebookChatApiStatic {}
-  interface Api {}
+  export interface Api {
+    search: string;
+  }
 
-  interface ErrorObject {
+  export interface ErrorObject {
     error: string;
   }
 
-  type FacebookID = string | number;
+  export type FacebookID = string | number;
 
   interface FacebookChatApiStatic {
     /**
@@ -24,24 +29,24 @@ declare namespace FacebookChatApi {
      * `options`: An object representing options to use when logging in (as described in [api.setOptions](#setOptions)).
      * `callback(err, api)`: A callback called when login is done (successful or not). `err` is an object containing a field `error`.
      */
-    (credentials: Credentials | AppStateContainer, callback?: (err: ErrorObject, api: Api) => any): void;
-    (credentials: Credentials | AppStateContainer, options: ApiOptions, callback?: (err: ErrorObject, api: Api) => any): void;
+    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
+    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, options: FacebookChatApi.ApiOptions, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
   }
 
-  interface Credentials {
+  export interface Credentials {
     email: string;
     password: string;
   }
 
-  interface AppStateContainer {
+  export interface AppStateContainer {
     appState: any;
   }
 
-  type UserStatus = 'offline' | 'idle' | 'active' | 'mobile';
+  export type UserStatus = 'offline' | 'idle' | 'active' | 'mobile';
 
-  type LogLevel = 'silly' | 'verbose' | 'info' | 'http' | 'warn' | 'error' | 'silent';
+  export type LogLevel = 'silly' | 'verbose' | 'info' | 'http' | 'warn' | 'error' | 'silent';
 
-  interface ApiOptions {
+  export interface ApiOptions {
     logLevel?: LogLevel;
     selfListen?: boolean;
     listenEvents?: boolean;
@@ -181,7 +186,7 @@ declare namespace FacebookChatApi {
     getFriendsList(callback: (err: Error, arr: Friend[]) => any): void;
   }
 
-  interface Friend {
+  export interface Friend {
     alternateName: string;
     firstName: string;
     gender: string;
@@ -210,7 +215,7 @@ declare namespace FacebookChatApi {
     getOnlineUsers(callback: (err: Error, arr: OnlineUser) => any): void;
   }
 
-  interface OnlineUser {
+  export interface OnlineUser {
     lastActive: any;  // TODO
     userID: number;
     status: UserStatus;
@@ -245,7 +250,7 @@ declare namespace FacebookChatApi {
     getThreadInfo(threadID: number, callback: (err: Error, info: GetThreadInfoResult) => any): any;
   }
 
-  interface GetThreadInfoResult {
+  export interface GetThreadInfoResult {
     participantIDs: string[];
     name: string;
     snippet: any; // TODO
@@ -322,7 +327,7 @@ declare namespace FacebookChatApi {
    * searchTokens,
    * alternateName
    */
-  interface GetUserInfoResult {
+  export interface GetUserInfoResult {
     name: string;
     firstName: string;
     vanity: string;  // TODO
@@ -350,13 +355,13 @@ declare namespace FacebookChatApi {
     listen(callback: (err: Error, eventType: FacebookEvent) => any): void;
   }
 
-  type EventType = 'message' | 'event' | 'typ' | 'read_receipt' | 'read' | 'presence';
+  export type EventType = 'message' | 'event' | 'typ' | 'read_receipt' | 'read' | 'presence';
 
-  interface BaseFacebookEvent {
+  export interface BaseFacebookEvent {
     type: EventType;
   }
 
-  interface MessageEvent extends BaseFacebookEvent {
+  export interface MessageEvent extends BaseFacebookEvent {
     /**
      * If `type` is `message`, the object will contain the following fields:
      * + `senderID`: The id of the person who sent the message in the chat with threadID.
@@ -370,7 +375,7 @@ declare namespace FacebookChatApi {
      * - `type`: The string `"event"` or `"typ"`
      * - `threadID`: The threadID representing the thread in which the message was sent.
      */
-    type: "message";
+      type: "message";
     senderID: string;
     body: string;
     threadID: string;
@@ -379,7 +384,7 @@ declare namespace FacebookChatApi {
     isGroup: boolean;
   }
 
-  interface EventEvent extends BaseFacebookEvent {
+  export interface EventEvent extends BaseFacebookEvent {
     /**
      * If `type` is `"event"` then the object will also have those fields:
      * - `logMessageType`: String representing the type of event (`"log:thread-name"`, `"log:unsubscribe"`, `"log:subscribe"`, ...)
@@ -387,14 +392,14 @@ declare namespace FacebookChatApi {
      * - `logMessageBody`: String printed in the chat.
      * - `author`: The person who performed the event.
      */
-    type: "event";
+      type: "event";
     logMessageType: string;
     logMessageData: any;
     logMessageBody: string;
     author: string;
   }
 
-  interface TypEvent extends BaseFacebookEvent {
+  export interface TypEvent extends BaseFacebookEvent {
     /**
      * If `type` is `"typ"` then the object will have the following fields:
      * - `isTyping`: Boolean representing whether or not a person started typing.
@@ -402,38 +407,38 @@ declare namespace FacebookChatApi {
      * - `threadID`: Current threadID.
      * - `fromMobile`: Boolean representing whether or not the person's using a mobile device to type.
      */
-    type: "typ";
+      type: "typ";
     isTyping: boolean;
     from: number;
     threadID: string;
     fromMobile: boolean;
   }
 
-  interface ReadReceiptEvent extends BaseFacebookEvent {
+  export interface ReadReceiptEvent extends BaseFacebookEvent {
     /**
      * If `type` is `"read_receipt"` then the object will have the following fields:
      * - `reader`: ID of the user who just read the message.
      * - `time`: The time at which the reader read the message.
      * - `threadID`: The thread in which the message was read.
      */
-    type: "read_receipt";
+      type: "read_receipt";
     reader: string;
     threadID: string;
     time: string;
   }
 
-  interface ReadEvent extends BaseFacebookEvent {
+  export interface ReadEvent extends BaseFacebookEvent {
     /**
      * If `type` is `"read"` then the object will have the following fields:
      * - `threadID`: The threadID representing the thread in which the message was sent.
      * - `time`: The time at which the user read the message.
      */
-    type: "read";
+      type: "read";
     threadID: string;
     time: string;
   }
 
-  interface PresenceEvent extends BaseFacebookEvent {
+  export interface PresenceEvent extends BaseFacebookEvent {
     /**
      * If enabled through [setOptions](#setOptions), this will also return presence, (`type` will be `"presence"`), which is the online status of the user's friends. The object given to the callback will have the following fields:
      * - `type`: The string "presence".
@@ -441,13 +446,13 @@ declare namespace FacebookChatApi {
      * - `userID`: The ID of the user whose status this packet is describing
      * - `statuses`: An object with the following fields: `fbAppStatus`, `messengerStatus`, `otherStatus`, `status` and `webStatus`. All can contain any of the following values: `"active"`, `"idle"`, `"invisible"`, `"offline"`.
      */
-    type: "presence";
+      type: "presence";
     timestamp: number;
     userID: number;
     statuses: UserStatuses;
   }
 
-  interface UserStatuses {
+  export interface UserStatuses {
     fbAppStatus: UserStatus;
     messengerStatus: UserStatus;
     otherStatus: UserStatus;
@@ -455,22 +460,22 @@ declare namespace FacebookChatApi {
     webStatus: UserStatus;
   }
 
-  type FacebookEvent = MessageEvent | EventEvent | TypEvent;
+  export type FacebookEvent = MessageEvent | EventEvent | TypEvent;
 
-  type AttachmentType = 'sticker' | 'file' | 'photo' | 'animated_image' | 'share';
+  export type AttachmentType = 'sticker' | 'file' | 'photo' | 'animated_image' | 'share';
 
-  interface BaseAttachment {
+  export interface BaseAttachment {
     type: AttachmentType;
   }
 
-  interface StickerAttachment extends BaseAttachment {
+  export interface StickerAttachment extends BaseAttachment {
     /**
      * If `attachments` contains an object with type is `"sticker"`, the same object will contain the following fields:
      * `url`, `stickerID`, `packID`, `frameCount`, `frameRate`,
      * `framesPerRow`, `framesPerCol`, `spriteURI`, `spriteURI2x`,
      * `height`, `width`, `caption`, `description`.
      */
-    type: "sticker";
+      type: "sticker";
     url: string;
     stickerID: number;
     packID: number;
@@ -486,12 +491,12 @@ declare namespace FacebookChatApi {
     description: string;
   }
 
-  interface FileAttachment extends BaseAttachment {
+  export interface FileAttachment extends BaseAttachment {
     /**
      * If `attachments` contains an object with type is `"file"`, the same object will contain the following fields:
      * `name`, `url`, `ID`, `fileSize`, `isMalicious`, `mimeType`.
      */
-    type: "file";
+      type: "file";
     name: string;
     url: string;
     ID: number;
@@ -500,14 +505,14 @@ declare namespace FacebookChatApi {
     mimeType: string;
   }
 
-  interface PhotoAttachment extends BaseAttachment {
+  export interface PhotoAttachment extends BaseAttachment {
     /**
      * If `attachments` contains an object with type is `"photo"`, the same object will contain the following fields:
      * `name`, `hiresUrl`, `thumbnailUrl`, `previewUrl`, `previewWidth`,
      * `previewHeight`, `facebookUrl`, `ID`, `filename`, `mimeType`,
      * `url`, `width`, `height`.
      */
-    type: "photo";
+      type: "photo";
     name: string;
     hiresUrl: string[];
     thumbnailUrl: string;
@@ -523,7 +528,7 @@ declare namespace FacebookChatApi {
     height: number;
   }
 
-  interface AnimatedImageAttachment extends BaseAttachment {
+  export interface AnimatedImageAttachment extends BaseAttachment {
     /**
      * If `animated_image` contains an object with type is `"animated_image"`, the same object will contain the following fields:
      * `name`, `facebookUrl`, `previewUrl`, `previewWidth`, `previewHeight`,
@@ -531,7 +536,7 @@ declare namespace FacebookChatApi {
      * `url`, `rawGifImage`, `rawWebpImage`, `animatedGifUrl`,
      * `animatedGifPreviewUrl`, `animatedWebpUrl`, `animatedWebpPreviewUrl`
      */
-    type: "animated_image";
+      type: "animated_image";
     name: string;
     facebookUrl: string;
     previewUrl: string;
@@ -552,14 +557,14 @@ declare namespace FacebookChatApi {
     animatedWebpPreviewUrl: string;
   }
 
-  interface ShareAttachment extends BaseAttachment {
+  export interface ShareAttachment extends BaseAttachment {
     /**
      * If `attachments` contains an object with type is `"share"`, the same object will contain the following fields:
      * `description`, `ID`, `subattachments`, `animatedImageSize`, `width`,
      * `height`, `image`, `playable`, `duration`, `source`, `title`,
      * `facebookUrl`, `url`.
      */
-    type: "share";
+      type: "share";
     description: string;
     ID: number;
     subattachments: Attachment; // TODO
@@ -575,7 +580,7 @@ declare namespace FacebookChatApi {
     url: string;
   }
 
-  type Attachment = StickerAttachment | FileAttachment | PhotoAttachment | AnimatedImageAttachment | ShareAttachment;
+  export type Attachment = StickerAttachment | FileAttachment | PhotoAttachment | AnimatedImageAttachment | ShareAttachment;
 
   interface Api {
     /**
@@ -640,7 +645,7 @@ declare namespace FacebookChatApi {
    * `folder`, `isArchived`, `recipientsLoadable`, `hasEmailParticipant`,
    * `readOnly`, `canReply`, `composerEnabled`, `blockedParticipants`, `lastMessageID`
    */
-  interface Thread {
+  export interface Thread {
     threadID: string;
     participantIDs: string[];
     formerParticipants: string[];
@@ -697,9 +702,9 @@ declare namespace FacebookChatApi {
    * Note that a message can only be a regular message (which can be empty) and optionally one of the following: a sticker, an attachment or a url.
    */
 
-  type Message = {body: string} | {sticker: string} | {attachment: Readable | Readable[]} | {url: string};
+  export type Message = {body: string} | {sticker: string} | {attachment: Readable | Readable[]} | {url: string};
 
-  interface MessageInfo {
+  export interface MessageInfo {
     threadID: string;
     messageID: string;
     timestamp : string; // TODO: check type
@@ -757,10 +762,9 @@ declare namespace FacebookChatApi {
     setTitle(newTitle: string, threadID: number, callback?: (err: Error, obj: SetTitleResult) => any): void;
   }
 
-  interface SetTitleResult {
+  export interface SetTitleResult {
     threadID: string;
   }
 }
 
-declare let login: FacebookChatApi.FacebookChatApiStatic;
-export = login;
+export = FacebookChatApi;
