@@ -4,33 +4,10 @@ declare var FacebookChatApi: FacebookChatApi.FacebookChatApiStatic;
 
 declare namespace FacebookChatApi {
 
-  export interface FacebookChatApiStatic {}
-  export interface Api {
-    search: string;
-  }
+  export type FacebookID = string | number;
 
   export interface ErrorObject {
     error: string;
-  }
-
-  export type FacebookID = string | number;
-
-  interface FacebookChatApiStatic {
-    /**
-     * login(credentials, [options], callback)
-     *
-     * This function is returned by `require(...)` and is the main entry point to the API.
-     * It allows the user to log into facebook given the right credentials.
-     * If it succeeds, `callback` will be called with a `null` object (for potential errors) and with an object containing all the available functions.
-     * If it fails, `callback` will be called with an error object.
-     *
-     *  __Arguments__
-     * `credentials`: An object containing the fields `email` and `password` used to login, __*or*__ an object containing the field `appState`.
-     * `options`: An object representing options to use when logging in (as described in [api.setOptions](#setOptions)).
-     * `callback(err, api)`: A callback called when login is done (successful or not). `err` is an object containing a field `error`.
-     */
-    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
-    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, options: FacebookChatApi.ApiOptions, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
   }
 
   export interface Credentials {
@@ -55,137 +32,6 @@ declare namespace FacebookChatApi {
     forceLogin?: boolean;
   }
 
-  interface Api {
-    /**
-     * api.addUserToGroup(userID, threadID, [callback])
-     *
-     * Adds a user (or array of users) to a group chat.
-     *
-     * __Arguments__
-     * `userID`: User ID or array of user IDs.
-     * `threadID`: Group chat ID.
-     * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
-     */
-    addUserToGroup (userID: number, threadID: number, callback?: (err: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.changeArchivedStatus(threadOrThreads, archive, [callback])
-     *
-     * Given a threadID, or an array of threadIDs, will set the archive status of the threads to `archive`. Archiving a thread will hide it from the logged-in user's inbox until the next time a message is sent or received.
-     *
-     * __Arguments__
-     * `threadOrThreads`: The id(s) of the threads you wish to archive/unarchive.
-     * `archive`: Boolean indicating the new archive status to assign to the thread(s).
-     * `callback(err)`: A callback called when the query is done (either with an error or null).
-     */
-    changeArchivedStatus (threadOrThreadsID: number | number[], archive: boolean, callback?: (err: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.changeGroupImage(image, threadID, [callback])
-     *
-     * Will change the group chat's image to the given image.
-     *
-     * __Arguments__
-     * `image`: File stream of image.
-     * `threadID`: String representing the ID of the thread.
-     * `callback(err)`: A callback called when the change is done (either with an error or null).
-     */
-    changeGroupImage (image: any, threadID: number, callback?: (err: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.changeThreadColor(color, threadID, [callback])
-     *
-     * Will change the thread color to the given hex string color ("#0000ff"). Set it
-     * to empty string if you want the default.
-     * Note: the color needs to start with a "#".
-     *
-     * __Arguments__
-     * `color`: String representing a hex color code (eg: "#0000ff") preceded by "#".
-     * `threadID`: String representing the ID of the thread.
-     * `callback(err)`: A callback called when the change is done (either with an error or null).
-     */
-    changeThreadColor(color: string, threadID: number, callback?: (err: Error) => any): any;
-  }
-
-  interface Api {
-    /**
-     * api.changeThreadEmoji(emoji, threadID, [callback])
-     *
-     * Will change the thread emoji to the one provided.
-     * Note: The UI doesn't play nice with all emoji.
-     *
-     *  __Arguments__
-     * `emoji`: String containing a single emoji character.
-     * `threadID`: String representing the ID of the thread.
-     * `callback(err)`: A callback called when the change is done (either with an error or null).
-     */
-    changeThreadEmoji(emoji: string, threadID: number,  callback?: (err: Error) => any): any;
-  }
-
-  interface Api {
-    /**
-     * api.changeNickname(nickname, threadID, participantID, [callback])
-     *
-     * Will change the thread user nickname to the one provided.
-     *
-     *  __Arguments__
-     * `nickname`: String containing a nickname. For reset of nickname left it empty
-     * `threadID`: String representing the ID of the thread.
-     * `participantID`: String representing the ID of the user.
-     * `callback(err)`: An optional callback called when the change is done (either with an error or null).
-     */
-    changeNickname(nickname: string, threadID: number, participantID: number, callback?: (err: Error) => any): any;
-  }
-
-  interface Api {
-    /**
-     * api.deleteMessage(messageOrMessages, [callback])
-     *
-     * Takes a messageID or an array of messageIDs and deletes the corresponding message.
-     *
-     * __Arguments__
-     * `messageOrMessages`: A messageID string or messageID string array
-     * `callback(err)`: A callback called when the query is done (either with an error or null).
-     */
-    deleteMessage(messageOrMessagesID: number | number[], callback?: (err: Error) => any): any;
-  }
-
-  interface Api {
-    /**
-     * api.getAppState()
-     *
-     * Returns current appState which can be saved to a file or stored in a variable.
-     */
-    getAppState(): AppStateContainer;
-  }
-
-  interface Api {
-    /**
-     * api.getCurrentUserID()
-     *
-     * Returns the currently logged-in user's Facebook user ID.
-     */
-    getCurrentUserID(): number;
-  }
-
-  interface Api {
-    /**
-     * api.getFriendsList(callback)
-     *
-     * Returns an array of objects with some information about your friends.
-     *
-     * __Arguments__
-     * `callback(err, arr)` - A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of objects with the following fields: `alternateName`, `firstName`, `gender`, `userID`, `isFriend`, `fullName`, `profilePicture`, `type`, `profileUrl`, `vanity`, `isBirthday`.
-     */
-    getFriendsList(callback: (err: Error, arr: Friend[]) => any): void;
-  }
-
   export interface Friend {
     alternateName: string;
     firstName: string;
@@ -200,54 +46,10 @@ declare namespace FacebookChatApi {
     isBirthday: boolean;
   }
 
-  interface Api {
-    /**
-     * api.getOnlineUsers([callback])
-     *
-     * Obtains users currently online and calls the callback with a list of the online users.
-     *
-     * __Arguments__
-     * `callback(err, arr)`: A callback called when the query is done (either with an error or with null followed by an array `arr`). `arr`
-     * is an array of objects with the following keys: `lastActive`, `userID` and `status`. `status` is one of `['offline', 'idle', 'active', 'mobile']`.
-     *
-     * Look at [listen](#listen) for details on how to get updated presence.
-     */
-    getOnlineUsers(callback: (err: Error, arr: OnlineUser) => any): void;
-  }
-
   export interface OnlineUser {
     lastActive: any;  // TODO
     userID: number;
     status: UserStatus;
-  }
-
-  interface Api {
-    /**
-     * api.getThreadHistory(threadID, start, end, timestamp, [callback])
-     *
-     * Takes a threadID, start and end numbers, a timestamp, and a callback.
-     *
-     * __Arguments__
-     * `threadID`: A threadID corresponding to the target chat
-     * `start`: The ith message in the chat from which to start retrieving history.
-     * `end`: The jth message in the chat to which retrieving history.
-     * `timestamp`: Used to described the end time. If set, will query messages up to and including `timestamp`.
-     * `callback(error, history)`: If error is null, history will contain an array of message objects.
-     */
-    getThreadHistory(threadID: number, start: number, end: number, timestamp: any, callback: (err: Error, history: Message[]) => any): any;
-  }
-
-  interface Api {
-    /**
-     * api.getThreadInfo(threadID, [callback])
-     *
-     * Takes a threadID and a callback.  Works for both single-user and group threads.
-     *
-     * __Arguments__
-     * `threadID`: A threadID corresponding to the target thread.
-     * `callback(error, info)`: If error is null, info will contain participantIDs, name, snippet, messageCount, emoji, nicknames, and color.  The last three will be null if custom values are not set for the thread.
-     */
-    getThreadInfo(threadID: number, callback: (err: Error, info: GetThreadInfoResult) => any): any;
   }
 
   export interface GetThreadInfoResult {
@@ -260,72 +62,11 @@ declare namespace FacebookChatApi {
     color: string;
   }
 
-  interface Api {
-    /**
-     * api.getThreadList(start, end, callback)
-     *
-     * Will return information about threads.
-     *
-     * __Arguments__
-     * `start`: Start index in the list of recently used threads.
-     * `end`: End index.
-     * `callback(err, arr)`: A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of thread object containing the following properties: `threadID`, <del>`participants`</del>, `participantIDs`, `formerParticipants`, `name`, `snippet`, `snippetHasAttachment`, `snippetAttachments`, `snippetSender`, `unreadCount`, `messageCount`, `imageSrc`, `timestamp`, `serverTimestamp`, `muteSettings`, `isCanonicalUser`, `isCanonical`, `canonicalFbid`, `isSubscribed`, `rootMessageThreadingID`, `folder`, `isArchived`, `recipientsLoadable`, `hasEmailParticipant`, `readOnly`, `canReply`, `composerEnabled`, `blockedParticipants`, `lastMessageID`.
-     */
-    getThreadList(start: number, end: number, callback: (err: Error, obj: Thread[]) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.deleteThread(threadOrThreads, [callback])
-     *
-     * Given a threadID, or an array of threadIDs, will delete the threads from your account. Note that this does *not* remove the messages from Facebook's servers - anyone who hasn't deleted the thread can still view all of the messages.
-     *
-     * __Arguments__
-     * `threadOrThreads` - The id(s) of the threads you wish to remove from your account.
-     * `callback(err)` - A callback called when the operation is done, maybe with an object representing an error.
-     */
-    deleteThread(threadOrThreads: number | number[], callback?: (err: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.getUserID(name, callback)
-     *
-     * Given the full name of a Facebook user, the call will perform a Facebook Graph search and return all corresponding IDs (order determined by Facebook).
-     *
-     * __Arguments__
-     * `name` - A string being the name of the person you're looking for.
-     * `callback(err, obj)` - A callback called when the search is done (either with an error or with the resulting object). `obj` is an array which contains all of the users that facebook graph search found, ordered by "importance".
-     */
-    getUserID(name: string, callback: (err: Error, arr: number[]) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.getUserInfo(ids, callback)
-     *
-     * Will get some information about the given users.
-     *
-     * __Arguments__
-     * `ids` - Either a string/number for one ID or an array of strings/numbers for a batched query.
-     * `callback(err, obj)` - A callback called when the query is done (either with an error or with an confirmation object).
-     */
-    getUserInfo(ids: number | number[], callback: (err: Error, arr: GetUserInfoResult[]) => any): void;
-  }
-
   /**
    * `obj` is a mapping from userId to another object containing the following properties:
-   * name,
-   * firstName,
-   * vanity,
-   * thumbSrc,
-   * profileUrl,
-   * gender,
-   * type,
-   * isFriend,
-   * isBirthday,
-   * searchTokens,
-   * alternateName
+   * name, firstName, vanity, thumbSrc,
+   * profileUrl, gender, type, isFriend,
+   * isBirthday, searchTokens, alternateName
    */
   export interface GetUserInfoResult {
     name: string;
@@ -339,20 +80,6 @@ declare namespace FacebookChatApi {
     isBirthday: boolean;
     searchTokens: any;  // TODO
     alternateName: string;
-  }
-
-
-  interface Api {
-    /**
-     * api.listen(callback)
-     *
-     * Will call `callback` when a new message is received on this account.
-     * By default this won't receive events (joining/leaving a chat, title change etc...) but it can be activated with `api.setOptions({listenEvents: true})`.  This will by default ignore messages sent by the current account, you can enable listening to your own messages with `api.setOptions({selfListen: true})`. This returns `stopListening` that will stop the `listen` loop and is guaranteed to prevent any future calls to the callback given to `listen`. An immediate call to `stopListening` when an error occurs will prevent the listen function to continue.
-     *
-     *  __Arguments__
-     *  `callback(error, message)`: A callback called every time the logged-in account receives a new message.
-     */
-    listen(callback: (err: Error, eventType: FacebookEvent) => any): void;
   }
 
   export type EventType = 'message' | 'event' | 'typ' | 'read_receipt' | 'read' | 'presence';
@@ -582,59 +309,6 @@ declare namespace FacebookChatApi {
 
   export type Attachment = StickerAttachment | FileAttachment | PhotoAttachment | AnimatedImageAttachment | ShareAttachment;
 
-  interface Api {
-    /**
-     * api.logout([callback])
-     *
-     * Logs out the current user.
-     *
-     * __Arguments__
-     * `callback(err)`: A callback called when the query is done (either with an error or with null).
-     */
-    logout(callback?: (err: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.markAsRead(threadID, [callback])
-     *
-     * Given a threadID will mark all the unread messages as read. Facebook will take a couple of seconds to show that you've read the messages.
-     *
-     * __Arguments__
-     * `threadID` - The id of the thread in which you want to mark the messages as read.
-     * `callback(err)` - A callback called when the operation is done maybe with an object representing an error.
-     */
-    markAsRead(threadID: number, callback?: (err?: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.removeUserFromGroup(userID, threadID, [callback])
-     *
-     * Removes a user from a group chat.
-     *
-     * __Arguments__
-     * `userID`: User ID.
-     * `threadID`: Group chat ID.
-     * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
-     */
-    removeUserFromGroup(userID: number, threadID: number, callback?: (err?: Error) => any): void;
-  }
-
-  interface Api {
-    /**
-     * api.searchForThread(name, callback)
-     *
-     * Takes a chat title (thread name) and returns matching results as a formatted threads array (ordered according to Facebook).
-     *
-     * __Arguments__
-     * `name`: A messageID string or messageID string array
-     * `callback(err, obj)`: A callback called when the query is done (either with an error or a thread object).
-     */
-    searchForThread(name: FacebookID | FacebookID[], callback: (err: Error, obj: Thread) => any): void;
-    // TODO: check if the doc is right, it looks like obj could be an array of Threads
-  }
-
   /**
    * The object passed in the callback has the following shape:
    * `threadID`, `participantIDs`, `formerParticipants`,
@@ -676,20 +350,6 @@ declare namespace FacebookChatApi {
     lastMessageID: number;
   }
 
-  interface Api {
-    /**
-     * api.sendMessage(message, threadID, [callback])
-     *
-     * Sends the given message to the threadID.
-     *
-     * __Arguments__
-     * `message`: A string (for backward compatibility) or a message object as described below.
-     * `threadID`: A string, number, or array representing a thread. It happens to be someone's userId in the case of a one to one conversation or an array of userIds when starting a new group chat.
-     * `callback(err, messageInfo)`: A callback called when sending the message is done (either with an error or with an confirmation object). `messageInfo` contains the `threadID` where the message was sent and a `messageID`, as well as the `timestamp` of the message.
-     */
-    sendMessage(message: string | Message, threadID: FacebookID | FacebookID[], callback?: (err: Error, messageInfo: MessageInfo) => any): void;
-  }
-
   /**
    * __Message Object__:
    *
@@ -710,7 +370,273 @@ declare namespace FacebookChatApi {
     timestamp : string; // TODO: check type
   }
 
-  interface Api {
+  export interface SetTitleResult {
+    threadID: string;
+  }
+
+  export interface Api {
+    /**
+     * api.addUserToGroup(userID, threadID, [callback])
+     *
+     * Adds a user (or array of users) to a group chat.
+     *
+     * __Arguments__
+     * `userID`: User ID or array of user IDs.
+     * `threadID`: Group chat ID.
+     * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
+     */
+    addUserToGroup (userID: number, threadID: number, callback?: (err: Error) => any): void;
+
+    /**
+     * api.changeArchivedStatus(threadOrThreads, archive, [callback])
+     *
+     * Given a threadID, or an array of threadIDs, will set the archive status of the threads to `archive`. Archiving a thread will hide it from the logged-in user's inbox until the next time a message is sent or received.
+     *
+     * __Arguments__
+     * `threadOrThreads`: The id(s) of the threads you wish to archive/unarchive.
+     * `archive`: Boolean indicating the new archive status to assign to the thread(s).
+     * `callback(err)`: A callback called when the query is done (either with an error or null).
+     */
+    changeArchivedStatus (threadOrThreadsID: number | number[], archive: boolean, callback?: (err: Error) => any): void;
+
+    /**
+     * api.changeGroupImage(image, threadID, [callback])
+     *
+     * Will change the group chat's image to the given image.
+     *
+     * __Arguments__
+     * `image`: File stream of image.
+     * `threadID`: String representing the ID of the thread.
+     * `callback(err)`: A callback called when the change is done (either with an error or null).
+     */
+    changeGroupImage (image: any, threadID: number, callback?: (err: Error) => any): void;
+
+    /**
+     * api.changeThreadColor(color, threadID, [callback])
+     *
+     * Will change the thread color to the given hex string color ("#0000ff"). Set it
+     * to empty string if you want the default.
+     * Note: the color needs to start with a "#".
+     *
+     * __Arguments__
+     * `color`: String representing a hex color code (eg: "#0000ff") preceded by "#".
+     * `threadID`: String representing the ID of the thread.
+     * `callback(err)`: A callback called when the change is done (either with an error or null).
+     */
+    changeThreadColor(color: string, threadID: number, callback?: (err: Error) => any): any;
+
+    /**
+     * api.changeThreadEmoji(emoji, threadID, [callback])
+     *
+     * Will change the thread emoji to the one provided.
+     * Note: The UI doesn't play nice with all emoji.
+     *
+     *  __Arguments__
+     * `emoji`: String containing a single emoji character.
+     * `threadID`: String representing the ID of the thread.
+     * `callback(err)`: A callback called when the change is done (either with an error or null).
+     */
+    changeThreadEmoji(emoji: string, threadID: number,  callback?: (err: Error) => any): any;
+
+    /**
+     * api.changeNickname(nickname, threadID, participantID, [callback])
+     *
+     * Will change the thread user nickname to the one provided.
+     *
+     *  __Arguments__
+     * `nickname`: String containing a nickname. For reset of nickname left it empty
+     * `threadID`: String representing the ID of the thread.
+     * `participantID`: String representing the ID of the user.
+     * `callback(err)`: An optional callback called when the change is done (either with an error or null).
+     */
+    changeNickname(nickname: string, threadID: number, participantID: number, callback?: (err: Error) => any): any;
+
+    /**
+     * api.deleteMessage(messageOrMessages, [callback])
+     *
+     * Takes a messageID or an array of messageIDs and deletes the corresponding message.
+     *
+     * __Arguments__
+     * `messageOrMessages`: A messageID string or messageID string array
+     * `callback(err)`: A callback called when the query is done (either with an error or null).
+     */
+    deleteMessage(messageOrMessagesID: number | number[], callback?: (err: Error) => any): any;
+
+    /**
+     * api.getAppState()
+     *
+     * Returns current appState which can be saved to a file or stored in a variable.
+     */
+    getAppState(): AppStateContainer;
+
+    /**
+     * api.getCurrentUserID()
+     *
+     * Returns the currently logged-in user's Facebook user ID.
+     */
+    getCurrentUserID(): number;
+
+    /**
+     * api.getFriendsList(callback)
+     *
+     * Returns an array of objects with some information about your friends.
+     *
+     * __Arguments__
+     * `callback(err, arr)` - A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of objects with the following fields: `alternateName`, `firstName`, `gender`, `userID`, `isFriend`, `fullName`, `profilePicture`, `type`, `profileUrl`, `vanity`, `isBirthday`.
+     */
+    getFriendsList(callback: (err: Error, arr: Friend[]) => any): void;
+
+    /**
+     * api.getOnlineUsers([callback])
+     *
+     * Obtains users currently online and calls the callback with a list of the online users.
+     *
+     * __Arguments__
+     * `callback(err, arr)`: A callback called when the query is done (either with an error or with null followed by an array `arr`). `arr`
+     * is an array of objects with the following keys: `lastActive`, `userID` and `status`. `status` is one of `['offline', 'idle', 'active', 'mobile']`.
+     *
+     * Look at [listen](#listen) for details on how to get updated presence.
+     */
+    getOnlineUsers(callback: (err: Error, arr: OnlineUser) => any): void;
+
+    /**
+     * api.getThreadHistory(threadID, start, end, timestamp, [callback])
+     *
+     * Takes a threadID, start and end numbers, a timestamp, and a callback.
+     *
+     * __Arguments__
+     * `threadID`: A threadID corresponding to the target chat
+     * `start`: The ith message in the chat from which to start retrieving history.
+     * `end`: The jth message in the chat to which retrieving history.
+     * `timestamp`: Used to described the end time. If set, will query messages up to and including `timestamp`.
+     * `callback(error, history)`: If error is null, history will contain an array of message objects.
+     */
+    getThreadHistory(threadID: number, start: number, end: number, timestamp: any, callback: (err: Error, history: Message[]) => any): any;
+
+    /**
+     * api.getThreadInfo(threadID, [callback])
+     *
+     * Takes a threadID and a callback.  Works for both single-user and group threads.
+     *
+     * __Arguments__
+     * `threadID`: A threadID corresponding to the target thread.
+     * `callback(error, info)`: If error is null, info will contain participantIDs, name, snippet, messageCount, emoji, nicknames, and color.  The last three will be null if custom values are not set for the thread.
+     */
+    getThreadInfo(threadID: number, callback: (err: Error, info: GetThreadInfoResult) => any): any;
+
+    /**
+     * api.getThreadList(start, end, callback)
+     *
+     * Will return information about threads.
+     *
+     * __Arguments__
+     * `start`: Start index in the list of recently used threads.
+     * `end`: End index.
+     * `callback(err, arr)`: A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of thread object containing the following properties: `threadID`, <del>`participants`</del>, `participantIDs`, `formerParticipants`, `name`, `snippet`, `snippetHasAttachment`, `snippetAttachments`, `snippetSender`, `unreadCount`, `messageCount`, `imageSrc`, `timestamp`, `serverTimestamp`, `muteSettings`, `isCanonicalUser`, `isCanonical`, `canonicalFbid`, `isSubscribed`, `rootMessageThreadingID`, `folder`, `isArchived`, `recipientsLoadable`, `hasEmailParticipant`, `readOnly`, `canReply`, `composerEnabled`, `blockedParticipants`, `lastMessageID`.
+     */
+    getThreadList(start: number, end: number, callback: (err: Error, obj: Thread[]) => any): void;
+
+    /**
+     * api.deleteThread(threadOrThreads, [callback])
+     *
+     * Given a threadID, or an array of threadIDs, will delete the threads from your account. Note that this does *not* remove the messages from Facebook's servers - anyone who hasn't deleted the thread can still view all of the messages.
+     *
+     * __Arguments__
+     * `threadOrThreads` - The id(s) of the threads you wish to remove from your account.
+     * `callback(err)` - A callback called when the operation is done, maybe with an object representing an error.
+     */
+    deleteThread(threadOrThreads: number | number[], callback?: (err: Error) => any): void;
+
+    /**
+     * api.getUserID(name, callback)
+     *
+     * Given the full name of a Facebook user, the call will perform a Facebook Graph search and return all corresponding IDs (order determined by Facebook).
+     *
+     * __Arguments__
+     * `name` - A string being the name of the person you're looking for.
+     * `callback(err, obj)` - A callback called when the search is done (either with an error or with the resulting object). `obj` is an array which contains all of the users that facebook graph search found, ordered by "importance".
+     */
+    getUserID(name: string, callback: (err: Error, arr: number[]) => any): void;
+
+    /**
+     * api.getUserInfo(ids, callback)
+     *
+     * Will get some information about the given users.
+     *
+     * __Arguments__
+     * `ids` - Either a string/number for one ID or an array of strings/numbers for a batched query.
+     * `callback(err, obj)` - A callback called when the query is done (either with an error or with an confirmation object).
+     */
+    getUserInfo(ids: number | number[], callback: (err: Error, arr: GetUserInfoResult[]) => any): void;
+
+    /**
+     * api.listen(callback)
+     *
+     * Will call `callback` when a new message is received on this account.
+     * By default this won't receive events (joining/leaving a chat, title change etc...) but it can be activated with `api.setOptions({listenEvents: true})`.  This will by default ignore messages sent by the current account, you can enable listening to your own messages with `api.setOptions({selfListen: true})`. This returns `stopListening` that will stop the `listen` loop and is guaranteed to prevent any future calls to the callback given to `listen`. An immediate call to `stopListening` when an error occurs will prevent the listen function to continue.
+     *
+     *  __Arguments__
+     *  `callback(error, message)`: A callback called every time the logged-in account receives a new message.
+     */
+    listen(callback: (err: Error, eventType: FacebookEvent) => any): void;
+
+    /**
+     * api.logout([callback])
+     *
+     * Logs out the current user.
+     *
+     * __Arguments__
+     * `callback(err)`: A callback called when the query is done (either with an error or with null).
+     */
+    logout(callback?: (err: Error) => any): void;
+
+    /**
+     * api.markAsRead(threadID, [callback])
+     *
+     * Given a threadID will mark all the unread messages as read. Facebook will take a couple of seconds to show that you've read the messages.
+     *
+     * __Arguments__
+     * `threadID` - The id of the thread in which you want to mark the messages as read.
+     * `callback(err)` - A callback called when the operation is done maybe with an object representing an error.
+     */
+    markAsRead(threadID: number, callback?: (err?: Error) => any): void;
+
+    /**
+     * api.removeUserFromGroup(userID, threadID, [callback])
+     *
+     * Removes a user from a group chat.
+     *
+     * __Arguments__
+     * `userID`: User ID.
+     * `threadID`: Group chat ID.
+     * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
+     */
+    removeUserFromGroup(userID: number, threadID: number, callback?: (err?: Error) => any): void;
+
+    /**
+     * api.searchForThread(name, callback)
+     *
+     * Takes a chat title (thread name) and returns matching results as a formatted threads array (ordered according to Facebook).
+     *
+     * __Arguments__
+     * `name`: A messageID string or messageID string array
+     * `callback(err, obj)`: A callback called when the query is done (either with an error or a thread object).
+     */
+    searchForThread(name: FacebookID | FacebookID[], callback: (err: Error, obj: Thread) => any): void;
+    // TODO: check if the doc is right, it looks like obj could be an array of Threads
+
+    /**
+     * api.sendMessage(message, threadID, [callback])
+     *
+     * Sends the given message to the threadID.
+     *
+     * __Arguments__
+     * `message`: A string (for backward compatibility) or a message object as described below.
+     * `threadID`: A string, number, or array representing a thread. It happens to be someone's userId in the case of a one to one conversation or an array of userIds when starting a new group chat.
+     * `callback(err, messageInfo)`: A callback called when sending the message is done (either with an error or with an confirmation object). `messageInfo` contains the `threadID` where the message was sent and a `messageID`, as well as the `timestamp` of the message.
+     */
+    sendMessage(message: string | Message, threadID: FacebookID | FacebookID[], callback?: (err: Error, messageInfo: MessageInfo) => any): void;
+
     /**
      * api.sendTypingIndicator(threadID, [callback])
      *
@@ -721,9 +647,7 @@ declare namespace FacebookChatApi {
      * `callback(err)`: A callback called when the query is done (with an error or with null).
      */
     sendTypingIndicator(threadID: number, callback?: (err: Error) => any): any;
-  }
 
-  interface Api {
     /**
      * api.setOptions(options)
      *
@@ -744,9 +668,7 @@ declare namespace FacebookChatApi {
      * - `forceLogin`: (Default `false`) Will automatically approve of any recent logins and continue with the login process.
      */
     setOptions(options: ApiOptions): void;
-  }
 
-  interface Api {
     /**
      * api.setTitle(newTitle, threadID, [callback])
      *
@@ -762,9 +684,24 @@ declare namespace FacebookChatApi {
     setTitle(newTitle: string, threadID: number, callback?: (err: Error, obj: SetTitleResult) => any): void;
   }
 
-  export interface SetTitleResult {
-    threadID: string;
+  export interface FacebookChatApiStatic {
+    /**
+     * login(credentials, [options], callback)
+     *
+     * This function is returned by `require(...)` and is the main entry point to the API.
+     * It allows the user to log into facebook given the right credentials.
+     * If it succeeds, `callback` will be called with a `null` object (for potential errors) and with an object containing all the available functions.
+     * If it fails, `callback` will be called with an error object.
+     *
+     *  __Arguments__
+     * `credentials`: An object containing the fields `email` and `password` used to login, __*or*__ an object containing the field `appState`.
+     * `options`: An object representing options to use when logging in (as described in [api.setOptions](#setOptions)).
+     * `callback(err, api)`: A callback called when login is done (successful or not). `err` is an object containing a field `error`.
+     */
+    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
+    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, options: FacebookChatApi.ApiOptions, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
   }
+
 }
 
 export = FacebookChatApi;
