@@ -1,3 +1,7 @@
-import test = require('blue-tape');
+import * as test from 'blue-tape';
+import * as login from 'facebook-chat-api';
 
-import facebookChatApi = require('facebook-chat-api');
+test('login', (t) => {
+  t.plan(1);
+  t.equal(typeof login, "function");
+});
