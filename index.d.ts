@@ -187,7 +187,7 @@ declare namespace FacebookChatApi {
     webStatus: UserStatus;
   }
 
-  export type FacebookEvent = MessageEvent | EventEvent | TypEvent;
+  export type Event = MessageEvent | EventEvent | TypEvent;
 
   export type AttachmentType = 'sticker' | 'file' | 'photo' | 'animated_image' | 'share';
 
@@ -578,7 +578,7 @@ declare namespace FacebookChatApi {
      *  __Arguments__
      *  `callback(error, message)`: A callback called every time the logged-in account receives a new message.
      */
-    listen(callback: (err: Error, eventType: FacebookEvent) => any): void;
+    listen(callback: (err: Error, eventType: Event) => any): void;
 
     /**
      * api.logout([callback])
