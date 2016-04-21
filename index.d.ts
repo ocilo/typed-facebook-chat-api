@@ -362,7 +362,12 @@ declare namespace FacebookChatApi {
    * Note that a message can only be a regular message (which can be empty) and optionally one of the following: a sticker, an attachment or a url.
    */
 
-  export type Message = {body: string} | {sticker: string} | {attachment: Readable | Readable[]} | {url: string};
+  export interface Message {
+    body: string
+    sticker?: string
+    attachment?: Readable | Readable[]
+    url?: string
+  }
 
   export interface MessageInfo {
     threadID: string;
