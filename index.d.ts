@@ -18,7 +18,8 @@ declare function FacebookChatApi (credentials: FacebookChatApi.Credentials | Fac
 
 declare namespace FacebookChatApi {
 
-  export type FacebookID = string | number;
+  type InputID = string | number;
+  type OutputID = string;
 
   export interface ErrorObject {
     error: string;
@@ -42,7 +43,7 @@ declare namespace FacebookChatApi {
     logLevel?: LogLevel;
     selfListen?: boolean;
     listenEvents?: boolean;
-    pageID?: number;
+    pageID?: InputID;
     updatePresence?: boolean;
     forceLogin?: boolean;
   }
@@ -51,7 +52,7 @@ declare namespace FacebookChatApi {
     alternateName: string;
     firstName: string;
     gender: string;
-    userID: number;
+    userID: OutputID;
     isFriend: boolean;
     fullName: string;
     profilePicture: any;
@@ -63,12 +64,12 @@ declare namespace FacebookChatApi {
 
   export interface OnlineUser {
     lastActive: any;  // TODO
-    userID: number;
+    userID: OutputID;
     status: UserStatus;
   }
 
   export interface GetThreadInfoResult {
-    participantIDs: string[];
+    participantIDs: OutputID[];
     name: string;
     snippet: any; // TODO
     messageCount: number;
@@ -99,98 +100,98 @@ declare namespace FacebookChatApi {
 
   export type EventType = 'message' | 'event' | 'typ' | 'read_receipt' | 'read' | 'presence';
 
-  export interface BaseFacebookEvent {
+  export interface BaseEvent {
     type: EventType;
   }
 
-  export interface MessageEvent extends BaseFacebookEvent {
-    /**
-     * If `type` is `message`, the object will contain the following fields:
-     * + `senderID`: The id of the person who sent the message in the chat with threadID.
-     * + `body`: The string corresponding to the message that was just received.
-     * + `threadID`: The threadID representing the thread in which the message was sent.
-     * + `messageID`: A string representing the message ID.
-     * + `attachments`: An array of attachments to the message.
-     * + `isGroup`: boolean, true if this thread is a group thread (more than 2 participants).
-     *
-     *  If enabled through [setOptions](#setOptions), this will also handle events. In this case, `message` will be either a message (see above) or an event object with the following fields:
-     * - `type`: The string `"event"` or `"typ"`
-     * - `threadID`: The threadID representing the thread in which the message was sent.
-     */
-      type: "message";
-    senderID: string;
+  /**
+   * If `type` is `message`, the object will contain the following fields:
+   * + `senderID`: The id of the person who sent the message in the chat with threadID.
+   * + `body`: The string corresponding to the message that was just received.
+   * + `threadID`: The threadID representing the thread in which the message was sent.
+   * + `messageID`: A string representing the message ID.
+   * + `attachments`: An array of attachments to the message.
+   * + `isGroup`: boolean, true if this thread is a group thread (more than 2 participants).
+   *
+   *  If enabled through [setOptions](#setOptions), this will also handle events. In this case, `message` will be either a message (see above) or an event object with the following fields:
+   * - `type`: The string `"event"` or `"typ"`
+   * - `threadID`: The threadID representing the thread in which the message was sent.
+   */
+  export interface MessageEvent extends BaseEvent {
+    type: "message";
+    senderID: OutputID;
     body: string;
-    threadID: string;
-    messageID: string;
+    threadID: OutputID;
+    messageID: OutputID;
     attachments: Attachment[];
     isGroup: boolean;
   }
 
-  export interface EventEvent extends BaseFacebookEvent {
-    /**
-     * If `type` is `"event"` then the object will also have those fields:
-     * - `logMessageType`: String representing the type of event (`"log:thread-name"`, `"log:unsubscribe"`, `"log:subscribe"`, ...)
-     * - `logMessageData`: Data relevant to the event.
-     * - `logMessageBody`: String printed in the chat.
-     * - `author`: The person who performed the event.
-     */
-      type: "event";
+  /**
+   * If `type` is `"event"` then the object will also have those fields:
+   * - `logMessageType`: String representing the type of event (`"log:thread-name"`, `"log:unsubscribe"`, `"log:subscribe"`, ...)
+   * - `logMessageData`: Data relevant to the event.
+   * - `logMessageBody`: String printed in the chat.
+   * - `author`: The person who performed the event.
+   */
+  export interface EventEvent extends BaseEvent {
+    type: "event";
     logMessageType: string;
     logMessageData: any;
     logMessageBody: string;
     author: string;
   }
 
-  export interface TypEvent extends BaseFacebookEvent {
-    /**
-     * If `type` is `"typ"` then the object will have the following fields:
-     * - `isTyping`: Boolean representing whether or not a person started typing.
-     * - `from`: ID of the user who started/stopped typing.
-     * - `threadID`: Current threadID.
-     * - `fromMobile`: Boolean representing whether or not the person's using a mobile device to type.
-     */
-      type: "typ";
+  /**
+   * If `type` is `"typ"` then the object will have the following fields:
+   * - `isTyping`: Boolean representing whether or not a person started typing.
+   * - `from`: ID of the user who started/stopped typing.
+   * - `threadID`: Current threadID.
+   * - `fromMobile`: Boolean representing whether or not the person's using a mobile device to type.
+   */
+  export interface TypEvent extends BaseEvent {
+    type: "typ";
     isTyping: boolean;
     from: number;
-    threadID: string;
+    threadID: OutputID;
     fromMobile: boolean;
   }
 
-  export interface ReadReceiptEvent extends BaseFacebookEvent {
-    /**
-     * If `type` is `"read_receipt"` then the object will have the following fields:
-     * - `reader`: ID of the user who just read the message.
-     * - `time`: The time at which the reader read the message.
-     * - `threadID`: The thread in which the message was read.
-     */
-      type: "read_receipt";
+  /**
+   * If `type` is `"read_receipt"` then the object will have the following fields:
+   * - `reader`: ID of the user who just read the message.
+   * - `time`: The time at which the reader read the message.
+   * - `threadID`: The thread in which the message was read.
+   */
+  export interface ReadReceiptEvent extends BaseEvent {
+    type: "read_receipt";
     reader: string;
-    threadID: string;
+    threadID: OutputID;
     time: string;
   }
 
-  export interface ReadEvent extends BaseFacebookEvent {
-    /**
-     * If `type` is `"read"` then the object will have the following fields:
-     * - `threadID`: The threadID representing the thread in which the message was sent.
-     * - `time`: The time at which the user read the message.
-     */
-      type: "read";
-    threadID: string;
+  /**
+   * If `type` is `"read"` then the object will have the following fields:
+   * - `threadID`: The threadID representing the thread in which the message was sent.
+   * - `time`: The time at which the user read the message.
+   */
+  export interface ReadEvent extends BaseEvent {
+    type: "read";
+    threadID: OutputID;
     time: string;
   }
 
-  export interface PresenceEvent extends BaseFacebookEvent {
-    /**
-     * If enabled through [setOptions](#setOptions), this will also return presence, (`type` will be `"presence"`), which is the online status of the user's friends. The object given to the callback will have the following fields:
-     * - `type`: The string "presence".
-     * - `timestamp`: How old the information is.
-     * - `userID`: The ID of the user whose status this packet is describing
-     * - `statuses`: An object with the following fields: `fbAppStatus`, `messengerStatus`, `otherStatus`, `status` and `webStatus`. All can contain any of the following values: `"active"`, `"idle"`, `"invisible"`, `"offline"`.
-     */
-      type: "presence";
+  /**
+   * If enabled through [setOptions](#setOptions), this will also return presence, (`type` will be `"presence"`), which is the online status of the user's friends. The object given to the callback will have the following fields:
+   * - `type`: The string "presence".
+   * - `timestamp`: How old the information is.
+   * - `userID`: The ID of the user whose status this packet is describing
+   * - `statuses`: An object with the following fields: `fbAppStatus`, `messengerStatus`, `otherStatus`, `status` and `webStatus`. All can contain any of the following values: `"active"`, `"idle"`, `"invisible"`, `"offline"`.
+   */
+  export interface PresenceEvent extends BaseEvent {
+    type: "presence";
     timestamp: number;
-    userID: number;
+    userID: OutputID;
     statuses: UserStatuses;
   }
 
@@ -210,17 +211,17 @@ declare namespace FacebookChatApi {
     type: AttachmentType;
   }
 
+  /**
+   * If `attachments` contains an object with type is `"sticker"`, the same object will contain the following fields:
+   * `url`, `stickerID`, `packID`, `frameCount`, `frameRate`,
+   * `framesPerRow`, `framesPerCol`, `spriteURI`, `spriteURI2x`,
+   * `height`, `width`, `caption`, `description`.
+   */
   export interface StickerAttachment extends BaseAttachment {
-    /**
-     * If `attachments` contains an object with type is `"sticker"`, the same object will contain the following fields:
-     * `url`, `stickerID`, `packID`, `frameCount`, `frameRate`,
-     * `framesPerRow`, `framesPerCol`, `spriteURI`, `spriteURI2x`,
-     * `height`, `width`, `caption`, `description`.
-     */
-      type: "sticker";
+    type: "sticker";
     url: string;
-    stickerID: number;
-    packID: number;
+    stickerID: OutputID;
+    packID: OutputID;
     frameCount: number;
     frameRate: number;
     framesPerRow: number;
@@ -233,28 +234,28 @@ declare namespace FacebookChatApi {
     description: string;
   }
 
+  /**
+   * If `attachments` contains an object with type is `"file"`, the same object will contain the following fields:
+   * `name`, `url`, `ID`, `fileSize`, `isMalicious`, `mimeType`.
+   */
   export interface FileAttachment extends BaseAttachment {
-    /**
-     * If `attachments` contains an object with type is `"file"`, the same object will contain the following fields:
-     * `name`, `url`, `ID`, `fileSize`, `isMalicious`, `mimeType`.
-     */
-      type: "file";
+    type: "file";
     name: string;
     url: string;
-    ID: number;
+    ID: OutputID;
     fileSize: number;
     isMalicious: boolean;
     mimeType: string;
   }
 
+  /**
+   * If `attachments` contains an object with type is `"photo"`, the same object will contain the following fields:
+   * `name`, `hiresUrl`, `thumbnailUrl`, `previewUrl`, `previewWidth`,
+   * `previewHeight`, `facebookUrl`, `ID`, `filename`, `mimeType`,
+   * `url`, `width`, `height`.
+   */
   export interface PhotoAttachment extends BaseAttachment {
-    /**
-     * If `attachments` contains an object with type is `"photo"`, the same object will contain the following fields:
-     * `name`, `hiresUrl`, `thumbnailUrl`, `previewUrl`, `previewWidth`,
-     * `previewHeight`, `facebookUrl`, `ID`, `filename`, `mimeType`,
-     * `url`, `width`, `height`.
-     */
-      type: "photo";
+    type: "photo";
     name: string;
     hiresUrl: string[];
     thumbnailUrl: string;
@@ -262,7 +263,7 @@ declare namespace FacebookChatApi {
     previewWidth: number;
     previewHeight: number;
     facebookUrl: string;
-    ID: number;
+    ID: OutputID;
     filename: string;
     mimeType: string;
     url: string;
@@ -270,22 +271,22 @@ declare namespace FacebookChatApi {
     height: number;
   }
 
+  /**
+   * If `animated_image` contains an object with type is `"animated_image"`, the same object will contain the following fields:
+   * `name`, `facebookUrl`, `previewUrl`, `previewWidth`, `previewHeight`,
+   * `thumbnailUrl`, `ID`, `filename`, `mimeType`, `width`, `height`,
+   * `url`, `rawGifImage`, `rawWebpImage`, `animatedGifUrl`,
+   * `animatedGifPreviewUrl`, `animatedWebpUrl`, `animatedWebpPreviewUrl`
+   */
   export interface AnimatedImageAttachment extends BaseAttachment {
-    /**
-     * If `animated_image` contains an object with type is `"animated_image"`, the same object will contain the following fields:
-     * `name`, `facebookUrl`, `previewUrl`, `previewWidth`, `previewHeight`,
-     * `thumbnailUrl`, `ID`, `filename`, `mimeType`, `width`, `height`,
-     * `url`, `rawGifImage`, `rawWebpImage`, `animatedGifUrl`,
-     * `animatedGifPreviewUrl`, `animatedWebpUrl`, `animatedWebpPreviewUrl`
-     */
-      type: "animated_image";
+    type: "animated_image";
     name: string;
     facebookUrl: string;
     previewUrl: string;
     previewWidth: number;
     previewHeight: number;
     thumbnailUrl: string;
-    ID: number;
+    ID: OutputID;
     filename: string;
     mimeType: string;
     width: number;
@@ -299,16 +300,16 @@ declare namespace FacebookChatApi {
     animatedWebpPreviewUrl: string;
   }
 
+  /**
+   * If `attachments` contains an object with type is `"share"`, the same object will contain the following fields:
+   * `description`, `ID`, `subattachments`, `animatedImageSize`, `width`,
+   * `height`, `image`, `playable`, `duration`, `source`, `title`,
+   * `facebookUrl`, `url`.
+   */
   export interface ShareAttachment extends BaseAttachment {
-    /**
-     * If `attachments` contains an object with type is `"share"`, the same object will contain the following fields:
-     * `description`, `ID`, `subattachments`, `animatedImageSize`, `width`,
-     * `height`, `image`, `playable`, `duration`, `source`, `title`,
-     * `facebookUrl`, `url`.
-     */
-      type: "share";
+    type: "share";
     description: string;
-    ID: number;
+    ID: OutputID;
     subattachments: Attachment; // TODO
     animatedImageSize: number;
     width: number;
@@ -335,7 +336,7 @@ declare namespace FacebookChatApi {
    * `readOnly`, `canReply`, `composerEnabled`, `blockedParticipants`, `lastMessageID`
    */
   export interface Thread {
-    threadID: string;
+    threadID: OutputID;
     participantIDs: string[];
     formerParticipants: string[];
     name: string;
@@ -362,7 +363,7 @@ declare namespace FacebookChatApi {
     canReply: boolean;
     composerEnabled: boolean;
     blockedParticipants: string[];
-    lastMessageID: number;
+    lastMessageID: OutputID;
   }
 
   /**
@@ -376,7 +377,6 @@ declare namespace FacebookChatApi {
    *
    * Note that a message can only be a regular message (which can be empty) and optionally one of the following: a sticker, an attachment or a url.
    */
-
   export interface Message {
     body: string
     sticker?: string
@@ -385,13 +385,13 @@ declare namespace FacebookChatApi {
   }
 
   export interface MessageInfo {
-    threadID: string;
-    messageID: string;
+    threadID: OutputID;
+    messageID: OutputID;
     timestamp : string; // TODO: check type
   }
 
   export interface SetTitleResult {
-    threadID: string;
+    threadID: OutputID;
   }
 
   export interface Api {
@@ -405,7 +405,7 @@ declare namespace FacebookChatApi {
      * `threadID`: Group chat ID.
      * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
      */
-    addUserToGroup (userID: number, threadID: number, callback?: (err: Error) => any): void;
+    addUserToGroup (userID: InputID, threadID: InputID, callback?: (err: ErrorObject) => any): void;
 
     /**
      * api.changeArchivedStatus(threadOrThreads, archive, [callback])
@@ -417,7 +417,7 @@ declare namespace FacebookChatApi {
      * `archive`: Boolean indicating the new archive status to assign to the thread(s).
      * `callback(err)`: A callback called when the query is done (either with an error or null).
      */
-    changeArchivedStatus (threadOrThreadsID: number | number[], archive: boolean, callback?: (err: Error) => any): void;
+    changeArchivedStatus (threadOrThreadsID: InputID[], archive: boolean, callback?: (err: ErrorObject) => any): void;
 
     /**
      * api.changeGroupImage(image, threadID, [callback])
@@ -429,7 +429,7 @@ declare namespace FacebookChatApi {
      * `threadID`: String representing the ID of the thread.
      * `callback(err)`: A callback called when the change is done (either with an error or null).
      */
-    changeGroupImage (image: any, threadID: number, callback?: (err: Error) => any): void;
+    changeGroupImage (image: any, threadID: InputID, callback?: (err: ErrorObject) => any): void;
 
     /**
      * api.changeThreadColor(color, threadID, [callback])
@@ -443,7 +443,7 @@ declare namespace FacebookChatApi {
      * `threadID`: String representing the ID of the thread.
      * `callback(err)`: A callback called when the change is done (either with an error or null).
      */
-    changeThreadColor(color: string, threadID: number, callback?: (err: Error) => any): any;
+    changeThreadColor(color: string, threadID: InputID, callback?: (err: ErrorObject) => any): any;
 
     /**
      * api.changeThreadEmoji(emoji, threadID, [callback])
@@ -456,7 +456,7 @@ declare namespace FacebookChatApi {
      * `threadID`: String representing the ID of the thread.
      * `callback(err)`: A callback called when the change is done (either with an error or null).
      */
-    changeThreadEmoji(emoji: string, threadID: number,  callback?: (err: Error) => any): any;
+    changeThreadEmoji(emoji: string, threadID: InputID,  callback?: (err: ErrorObject) => any): any;
 
     /**
      * api.changeNickname(nickname, threadID, participantID, [callback])
@@ -469,7 +469,7 @@ declare namespace FacebookChatApi {
      * `participantID`: String representing the ID of the user.
      * `callback(err)`: An optional callback called when the change is done (either with an error or null).
      */
-    changeNickname(nickname: string, threadID: number, participantID: number, callback?: (err: Error) => any): any;
+    changeNickname(nickname: string, threadID: InputID, participantID: InputID, callback?: (err: ErrorObject) => any): any;
 
     /**
      * api.deleteMessage(messageOrMessages, [callback])
@@ -480,7 +480,7 @@ declare namespace FacebookChatApi {
      * `messageOrMessages`: A messageID string or messageID string array
      * `callback(err)`: A callback called when the query is done (either with an error or null).
      */
-    deleteMessage(messageOrMessagesID: number | number[], callback?: (err: Error) => any): any;
+    deleteMessage(messageOrMessagesID: InputID[], callback?: (err: ErrorObject) => any): any;
 
     /**
      * api.getAppState()
@@ -494,7 +494,7 @@ declare namespace FacebookChatApi {
      *
      * Returns the currently logged-in user's Facebook user ID.
      */
-    getCurrentUserID(): number;
+    getCurrentUserID(): OutputID;
 
     /**
      * api.getFriendsList(callback)
@@ -504,7 +504,7 @@ declare namespace FacebookChatApi {
      * __Arguments__
      * `callback(err, arr)` - A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of objects with the following fields: `alternateName`, `firstName`, `gender`, `userID`, `isFriend`, `fullName`, `profilePicture`, `type`, `profileUrl`, `vanity`, `isBirthday`.
      */
-    getFriendsList(callback: (err: Error, arr: Friend[]) => any): void;
+    getFriendsList(callback: (err: ErrorObject, arr: Friend[]) => any): void;
 
     /**
      * api.getOnlineUsers([callback])
@@ -517,7 +517,7 @@ declare namespace FacebookChatApi {
      *
      * Look at [listen](#listen) for details on how to get updated presence.
      */
-    getOnlineUsers(callback: (err: Error, arr: OnlineUser) => any): void;
+    getOnlineUsers(callback: (err: ErrorObject, arr: OnlineUser) => any): void;
 
     /**
      * api.getThreadHistory(threadID, start, end, timestamp, [callback])
@@ -531,7 +531,7 @@ declare namespace FacebookChatApi {
      * `timestamp`: Used to described the end time. If set, will query messages up to and including `timestamp`.
      * `callback(error, history)`: If error is null, history will contain an array of message objects.
      */
-    getThreadHistory(threadID: number, start: number, end: number, timestamp: any, callback: (err: Error, history: Message[]) => any): any;
+    getThreadHistory(threadID: InputID, start: number, end: number, timestamp: any, callback: (err: ErrorObject, history: Message[]) => any): any;
 
     /**
      * api.getThreadInfo(threadID, [callback])
@@ -542,7 +542,7 @@ declare namespace FacebookChatApi {
      * `threadID`: A threadID corresponding to the target thread.
      * `callback(error, info)`: If error is null, info will contain participantIDs, name, snippet, messageCount, emoji, nicknames, and color.  The last three will be null if custom values are not set for the thread.
      */
-    getThreadInfo(threadID: number, callback: (err: Error, info: GetThreadInfoResult) => any): any;
+    getThreadInfo(threadID: InputID, callback: (err: ErrorObject, info: GetThreadInfoResult) => any): any;
 
     /**
      * api.getThreadList(start, end, callback)
@@ -554,7 +554,7 @@ declare namespace FacebookChatApi {
      * `end`: End index.
      * `callback(err, arr)`: A callback called when the query is done (either with an error or with an confirmation object). `arr` is an array of thread object containing the following properties: `threadID`, <del>`participants`</del>, `participantIDs`, `formerParticipants`, `name`, `snippet`, `snippetHasAttachment`, `snippetAttachments`, `snippetSender`, `unreadCount`, `messageCount`, `imageSrc`, `timestamp`, `serverTimestamp`, `muteSettings`, `isCanonicalUser`, `isCanonical`, `canonicalFbid`, `isSubscribed`, `rootMessageThreadingID`, `folder`, `isArchived`, `recipientsLoadable`, `hasEmailParticipant`, `readOnly`, `canReply`, `composerEnabled`, `blockedParticipants`, `lastMessageID`.
      */
-    getThreadList(start: number, end: number, callback: (err: Error, obj: Thread[]) => any): void;
+    getThreadList(start: number, end: number, callback: (err: ErrorObject, obj: Thread[]) => any): void;
 
     /**
      * api.deleteThread(threadOrThreads, [callback])
@@ -565,7 +565,7 @@ declare namespace FacebookChatApi {
      * `threadOrThreads` - The id(s) of the threads you wish to remove from your account.
      * `callback(err)` - A callback called when the operation is done, maybe with an object representing an error.
      */
-    deleteThread(threadOrThreads: number | number[], callback?: (err: Error) => any): void;
+    deleteThread(threadOrThreads: InputID[], callback?: (err: ErrorObject) => any): void;
 
     /**
      * api.getUserID(name, callback)
@@ -576,7 +576,7 @@ declare namespace FacebookChatApi {
      * `name` - A string being the name of the person you're looking for.
      * `callback(err, obj)` - A callback called when the search is done (either with an error or with the resulting object). `obj` is an array which contains all of the users that facebook graph search found, ordered by "importance".
      */
-    getUserID(name: string, callback: (err: Error, arr: number[]) => any): void;
+    getUserID(name: string, callback: (err: ErrorObject, arr: any[]) => any): void; // TODO: clarify the objects
 
     /**
      * api.getUserInfo(ids, callback)
@@ -587,7 +587,7 @@ declare namespace FacebookChatApi {
      * `ids` - Either a string/number for one ID or an array of strings/numbers for a batched query.
      * `callback(err, obj)` - A callback called when the query is done (either with an error or with an confirmation object).
      */
-    getUserInfo(ids: number | number[], callback: (err: Error, arr: GetUserInfoResult[]) => any): void;
+    getUserInfo(ids: InputID[], callback: (err: ErrorObject, arr: GetUserInfoResult[]) => any): void;
 
     /**
      * api.listen(callback)
@@ -598,7 +598,7 @@ declare namespace FacebookChatApi {
      *  __Arguments__
      *  `callback(error, message)`: A callback called every time the logged-in account receives a new message.
      */
-    listen(callback: (err: Error, eventType: Event) => any): void;
+    listen(callback: (err: ErrorObject, eventType: Event) => any): void;
 
     /**
      * api.logout([callback])
@@ -608,7 +608,7 @@ declare namespace FacebookChatApi {
      * __Arguments__
      * `callback(err)`: A callback called when the query is done (either with an error or with null).
      */
-    logout(callback?: (err: Error) => any): void;
+    logout(callback?: (err: ErrorObject) => any): void;
 
     /**
      * api.markAsRead(threadID, [callback])
@@ -619,7 +619,7 @@ declare namespace FacebookChatApi {
      * `threadID` - The id of the thread in which you want to mark the messages as read.
      * `callback(err)` - A callback called when the operation is done maybe with an object representing an error.
      */
-    markAsRead(threadID: number, callback?: (err?: Error) => any): void;
+    markAsRead(threadID: InputID, callback?: (err?: ErrorObject) => any): void;
 
     /**
      * api.removeUserFromGroup(userID, threadID, [callback])
@@ -631,7 +631,7 @@ declare namespace FacebookChatApi {
      * `threadID`: Group chat ID.
      * `callback(err)`: A callback called when the query is done (either with an error or with no arguments).
      */
-    removeUserFromGroup(userID: number, threadID: number, callback?: (err?: Error) => any): void;
+    removeUserFromGroup(userID: InputID, threadID: InputID, callback?: (err?: ErrorObject) => any): void;
 
     /**
      * api.searchForThread(name, callback)
@@ -642,7 +642,7 @@ declare namespace FacebookChatApi {
      * `name`: A messageID string or messageID string array
      * `callback(err, obj)`: A callback called when the query is done (either with an error or a thread object).
      */
-    searchForThread(name: FacebookID | FacebookID[], callback: (err: Error, obj: Thread) => any): void;
+    searchForThread(name: InputID | InputID[], callback: (err: ErrorObject, obj: Thread) => any): void;
     // TODO: check if the doc is right, it looks like obj could be an array of Threads
 
     /**
@@ -655,7 +655,7 @@ declare namespace FacebookChatApi {
      * `threadID`: A string, number, or array representing a thread. It happens to be someone's userId in the case of a one to one conversation or an array of userIds when starting a new group chat.
      * `callback(err, messageInfo)`: A callback called when sending the message is done (either with an error or with an confirmation object). `messageInfo` contains the `threadID` where the message was sent and a `messageID`, as well as the `timestamp` of the message.
      */
-    sendMessage(message: string | Message, threadID: FacebookID | FacebookID[], callback?: (err: Error, messageInfo: MessageInfo) => any): void;
+    sendMessage(message: string | Message, threadID: InputID | InputID[], callback?: (err: ErrorObject, messageInfo: MessageInfo) => any): void;
 
     /**
      * api.sendTypingIndicator(threadID, [callback])
@@ -666,7 +666,7 @@ declare namespace FacebookChatApi {
      * `threadID`: Group chat ID.
      * `callback(err)`: A callback called when the query is done (with an error or with null).
      */
-    sendTypingIndicator(threadID: number, callback?: (err: Error) => any): any;
+    sendTypingIndicator(threadID: InputID, callback?: (err: ErrorObject) => any): any;
 
     /**
      * api.setOptions(options)
@@ -701,7 +701,7 @@ declare namespace FacebookChatApi {
      * `threadID`: A string or number representing a thread. It happens to be someone's userId in the case of a one to one conversation.
      * `callback(err, obj)` - A callback called when sending the message is done (either with an error or with an confirmation object). `obj` contains only the threadID where the message was sent.
      */
-    setTitle(newTitle: string, threadID: number, callback?: (err: Error, obj: SetTitleResult) => any): void;
+    setTitle(newTitle: string, threadID: InputID, callback?: (err: ErrorObject, obj: SetTitleResult) => any): void;
   }
 }
 
