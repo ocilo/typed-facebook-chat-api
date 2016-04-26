@@ -1,6 +1,20 @@
 import {Readable} from 'stream';
 
-declare var FacebookChatApi: FacebookChatApi.FacebookChatApiStatic;
+/**
+ * login(credentials, [options], callback)
+ *
+ * This function is returned by `require(...)` and is the main entry point to the API.
+ * It allows the user to log into facebook given the right credentials.
+ * If it succeeds, `callback` will be called with a `null` object (for potential errors) and with an object containing all the available functions.
+ * If it fails, `callback` will be called with an error object.
+ *
+ *  __Arguments__
+ * `credentials`: An object containing the fields `email` and `password` used to login, __*or*__ an object containing the field `appState`.
+ * `options`: An object representing options to use when logging in (as described in [api.setOptions](#setOptions)).
+ * `callback(err, api)`: A callback called when login is done (successful or not). `err` is an object containing a field `error`.
+ */
+declare function FacebookChatApi(credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
+declare function FacebookChatApi (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, options: FacebookChatApi.ApiOptions, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
 
 declare namespace FacebookChatApi {
 
@@ -8,6 +22,7 @@ declare namespace FacebookChatApi {
 
   export interface ErrorObject {
     error: string;
+    [key: string]: any;
   }
 
   export interface Credentials {
@@ -688,25 +703,6 @@ declare namespace FacebookChatApi {
      */
     setTitle(newTitle: string, threadID: number, callback?: (err: Error, obj: SetTitleResult) => any): void;
   }
-
-  export interface FacebookChatApiStatic {
-    /**
-     * login(credentials, [options], callback)
-     *
-     * This function is returned by `require(...)` and is the main entry point to the API.
-     * It allows the user to log into facebook given the right credentials.
-     * If it succeeds, `callback` will be called with a `null` object (for potential errors) and with an object containing all the available functions.
-     * If it fails, `callback` will be called with an error object.
-     *
-     *  __Arguments__
-     * `credentials`: An object containing the fields `email` and `password` used to login, __*or*__ an object containing the field `appState`.
-     * `options`: An object representing options to use when logging in (as described in [api.setOptions](#setOptions)).
-     * `callback(err, api)`: A callback called when login is done (successful or not). `err` is an object containing a field `error`.
-     */
-    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
-    (credentials: FacebookChatApi.Credentials | FacebookChatApi.AppStateContainer, options: FacebookChatApi.ApiOptions, callback?: (err: FacebookChatApi.ErrorObject, api: FacebookChatApi.Api) => any): void;
-  }
-
 }
 
 export = FacebookChatApi;

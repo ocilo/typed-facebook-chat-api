@@ -4,12 +4,9 @@
   "homepage": "https://github.com/Schmavery/facebook-chat-api",
   "version": "1.1.0",
   "devDependencies": {
-    "blue-tape": "registry:npm/blue-tape#0.1.0+20160322235613"
-  },
-  "ambientDevDependencies": {
-    "node": "registry:dt/node#4.0.0+20160319033040"
+    "blue-tape": "registry:npm/blue-tape#0.2.0+20160418015423"
   },
   "ambientDependencies": {
-    "node": "registry:dt/node#4.0.0+20160412142033"
+    "node": "registry:dt/node#4.0.0+20160423143914"
   }
 }
