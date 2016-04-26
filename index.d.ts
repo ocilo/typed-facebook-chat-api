@@ -118,7 +118,7 @@ declare namespace FacebookChatApi {
    * - `threadID`: The threadID representing the thread in which the message was sent.
    */
   export interface MessageEvent extends BaseEvent {
-    type: "message";
+    type: 'message';
     senderID: OutputID;
     body: string;
     threadID: OutputID;
@@ -135,7 +135,7 @@ declare namespace FacebookChatApi {
    * - `author`: The person who performed the event.
    */
   export interface EventEvent extends BaseEvent {
-    type: "event";
+    type: 'event';
     logMessageType: string;
     logMessageData: any;
     logMessageBody: string;
@@ -150,7 +150,7 @@ declare namespace FacebookChatApi {
    * - `fromMobile`: Boolean representing whether or not the person's using a mobile device to type.
    */
   export interface TypEvent extends BaseEvent {
-    type: "typ";
+    type: 'typ';
     isTyping: boolean;
     from: number;
     threadID: OutputID;
@@ -164,7 +164,7 @@ declare namespace FacebookChatApi {
    * - `threadID`: The thread in which the message was read.
    */
   export interface ReadReceiptEvent extends BaseEvent {
-    type: "read_receipt";
+    type: 'read_receipt';
     reader: string;
     threadID: OutputID;
     time: string;
@@ -176,7 +176,7 @@ declare namespace FacebookChatApi {
    * - `time`: The time at which the user read the message.
    */
   export interface ReadEvent extends BaseEvent {
-    type: "read";
+    type: 'read';
     threadID: OutputID;
     time: string;
   }
@@ -189,7 +189,7 @@ declare namespace FacebookChatApi {
    * - `statuses`: An object with the following fields: `fbAppStatus`, `messengerStatus`, `otherStatus`, `status` and `webStatus`. All can contain any of the following values: `"active"`, `"idle"`, `"invisible"`, `"offline"`.
    */
   export interface PresenceEvent extends BaseEvent {
-    type: "presence";
+    type: 'presence';
     timestamp: number;
     userID: OutputID;
     statuses: UserStatuses;
@@ -218,7 +218,7 @@ declare namespace FacebookChatApi {
    * `height`, `width`, `caption`, `description`.
    */
   export interface StickerAttachment extends BaseAttachment {
-    type: "sticker";
+    type: 'sticker';
     url: string;
     stickerID: OutputID;
     packID: OutputID;
@@ -239,7 +239,7 @@ declare namespace FacebookChatApi {
    * `name`, `url`, `ID`, `fileSize`, `isMalicious`, `mimeType`.
    */
   export interface FileAttachment extends BaseAttachment {
-    type: "file";
+    type: 'file';
     name: string;
     url: string;
     ID: OutputID;
@@ -255,7 +255,7 @@ declare namespace FacebookChatApi {
    * `url`, `width`, `height`.
    */
   export interface PhotoAttachment extends BaseAttachment {
-    type: "photo";
+    type: 'photo';
     name: string;
     hiresUrl: string[];
     thumbnailUrl: string;
@@ -279,7 +279,7 @@ declare namespace FacebookChatApi {
    * `animatedGifPreviewUrl`, `animatedWebpUrl`, `animatedWebpPreviewUrl`
    */
   export interface AnimatedImageAttachment extends BaseAttachment {
-    type: "animated_image";
+    type: 'animated_image';
     name: string;
     facebookUrl: string;
     previewUrl: string;
@@ -307,7 +307,7 @@ declare namespace FacebookChatApi {
    * `facebookUrl`, `url`.
    */
   export interface ShareAttachment extends BaseAttachment {
-    type: "share";
+    type: 'share';
     description: string;
     ID: OutputID;
     subattachments: Attachment; // TODO
@@ -378,10 +378,10 @@ declare namespace FacebookChatApi {
    * Note that a message can only be a regular message (which can be empty) and optionally one of the following: a sticker, an attachment or a url.
    */
   export interface Message {
-    body: string
-    sticker?: string
-    attachment?: Readable | Readable[]
-    url?: string
+    body: string;
+    sticker?: string;
+    attachment?: Readable | Readable[];
+    url?: string;
   }
 
   export interface MessageInfo {
