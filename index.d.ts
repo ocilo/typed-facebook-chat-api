@@ -18,6 +18,10 @@ declare function FacebookChatApi (credentials: FacebookChatApi.Credentials | Fac
 
 declare namespace FacebookChatApi {
 
+  interface Dictionary<T> {
+    [key: string]: T;
+  }
+
   type InputID = string | number;
   type OutputID = string;
 
@@ -84,7 +88,7 @@ declare namespace FacebookChatApi {
    * profileUrl, gender, type, isFriend,
    * isBirthday, searchTokens, alternateName
    */
-  export interface GetUserInfoResult {
+  export interface UserInfo {
     name: string;
     firstName: string;
     vanity: string;  // TODO
@@ -587,7 +591,7 @@ declare namespace FacebookChatApi {
      * `ids` - Either a string/number for one ID or an array of strings/numbers for a batched query.
      * `callback(err, obj)` - A callback called when the query is done (either with an error or with an confirmation object).
      */
-    getUserInfo(ids: InputID[], callback: (err: ErrorObject, arr: GetUserInfoResult[]) => any): void;
+    getUserInfo(ids: InputID[], callback: (err: ErrorObject, arr: Dictionary<UserInfo>) => any): void;
 
     /**
      * api.listen(callback)
